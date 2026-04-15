@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>PG Manager Pro | Complete Tenant Management System</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-home"></i>
+                <h2>PG Manager Pro</h2>
+            </div>
+            <div class="sidebar-nav">
+                <a href="#" class="nav-link active" data-page="dashboard">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-link" data-page="tenants">
+                    <i class="fas fa-users"></i>
+                    <span>Tenants</span>
+                </a>
+                <a href="#" class="nav-link" data-page="payments">
+                    <i class="fas fa-credit-card"></i>
+                    <span>Payments</span>
+                </a>
+                <a href="#" class="nav-link" data-page="reports">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reports</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div class="page-info">
+                    <h1 id="pageTitle">Dashboard</h1>
+                    <p id="pageDesc">Overview of your PG business</p>
+                </div>
+                <button class="btn-primary" id="addTenantBtn">
+                    <i class="fas fa-plus"></i>
+                    Add New Tenant
+                </button>
+            </div>
+
+            <!-- Dashboard Page -->
+            <div id="dashboardPage" class="page active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon bg-blue">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Total Tenants</h3>
+                            <p class="stat-value" id="totalTenants">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon bg-green">
+                            <i class="fas fa-rupee-sign"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Monthly Revenue</h3>
+                            <p class="stat-value" id="monthlyRevenue">₹0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon bg-orange">
+                            <i class="fas fa-hourglass-half"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Pending Payments</h3>
+                            <p class="stat-value" id="pendingPayments">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon bg-purple">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Paid This Month</h3>
+                            <p class="stat-value" id="paidThisMonth">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="recent-tenants">
+                    <div class="section-title">
+                        <h2>Recent Tenants</h2>
+                        <button class="btn-text" onclick="switchPage('tenants')">View All <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>Name</th><th>Room</th><th>Mobile</th><th>Status</th></tr>
+                            </thead>
+                            <tbody id="recentTenants"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tenants Page -->
+            <div id="tenantsPage" class="page">
+                <div class="filters">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Search by name, room or mobile...">
+                    </div>
+                    <select id="statusFilter" class="filter-select">
+                        <option value="all">All Tenants</option>
+                        <option value="active">Active Only</option>
+                        <option value="inactive">Inactive Only</option>
+                    </select>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th><th>Name</th><th>Room</th><th>Mobile</th><th>Rent</th><th>Join Date</th><th>Status</th><th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tenantsTable"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Payments Page -->
+            <div id="paymentsPage" class="page">
+                <div class="filters">
+                    <select id="monthFilter" class="filter-select"></select>
+                    <select id="paymentFilter" class="filter-select">
+                        <option value="all">All Status</option>
+                        <option value="paid">Paid</option>
+                        <option value="pending">Pending</option>
+                    </select>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tenant Name</th><th>Room</th><th>Month</th><th>Amount</th><th>Status</th><th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="paymentsTable"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Reports Page -->
+            <div id="reportsPage" class="page">
+                <div class="report-actions">
+                    <button class="btn-secondary" id="exportExcel">
+                        <i class="fas fa-file-excel"></i> Export Excel
+                    </button>
+                    <button class="btn-secondary" id="exportPDF">
+                        <i class="fas fa-file-pdf"></i> Export PDF
+                    </button>
+                </div>
+                <div class="report-summary">
+                    <h3>Financial Summary</h3>
+                    <div class="summary-grid">
+                        <div class="summary-item">
+                            <label>Total Expected Rent</label>
+                            <span id="totalExpected">₹0</span>
+                        </div>
+                        <div class="summary-item">
+                            <label>Total Collected</label>
+                            <span id="totalCollected">₹0</span>
+                        </div>
+                        <div class="summary-item">
+                            <label>Total Pending</label>
+                            <span id="totalPendingAmount">₹0</span>
+                        </div>
+                        <div class="summary-item">
+                            <label>Collection Rate</label>
+                            <span id="collectionRate">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Tenant Modal - FIXED SCROLLABLE -->
+    <div id="tenantModal" class="modal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add New Tenant</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="tenantForm">
+                    <input type="hidden" id="tenantId">
+                    <div class="form-group">
+                        <label>Full Name *</label>
+                        <input type="text" id="name" required placeholder="Enter full name">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Room Number *</label>
+                            <input type="text" id="room" required placeholder="e.g., 101">
+                        </div>
+                        <div class="form-group">
+                            <label>Mobile Number *</label>
+                            <input type="tel" id="mobile" required placeholder="9876543210">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Monthly Rent (₹) *</label>
+                            <input type="number" id="rent" required placeholder="8000">
+                        </div>
+                        <div class="form-group">
+                            <label>Security Deposit (₹)</label>
+                            <input type="number" id="deposit" placeholder="16000">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Joining Date *</label>
+                        <input type="date" id="joinDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="status">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel modal-close">Cancel</button>
+                <button type="submit" form="tenantForm" class="btn-save">
+                    <i class="fas fa-save"></i> Save Tenant
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-container modal-small">
+            <div class="modal-header">
+                <h3>Update Payment Status</h3>
+                <button class="modal-close-payment">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="payment-details">
+                    <p><strong>Tenant:</strong> <span id="payTenantName"></span></p>
+                    <p><strong>Room:</strong> <span id="payRoomNo"></span></p>
+                    <p><strong>Month:</strong> <span id="payMonth"></span></p>
+                    <p><strong>Amount:</strong> ₹<span id="payAmount"></span></p>
+                </div>
+                <div class="form-group">
+                    <label>Payment Status</label>
+                    <select id="paymentStatusSelect">
+                        <option value="paid">✅ Paid</option>
+                        <option value="pending">⏳ Pending</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel modal-close-payment">Cancel</button>
+                <button class="btn-save" id="updatePaymentBtn">
+                    <i class="fas fa-check"></i> Update Status
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
